@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubApps.AspNetCore.Mvc", "src\GitHubApps.AspNetCore.Mvc\GitHubApps.AspNetCore.Mvc.csproj", "{2DBD436E-E55E-4E27-9B9F-DBDEC4E89AF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHubApps.AspNetCore.Mvc.Testing", "test\GitHubApps.AspNetCore.Mvc.Testing\GitHubApps.AspNetCore.Mvc.Testing.csproj", "{63BB0858-DD7C-45C8-BC8D-68BC56BCFC2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DBD436E-E55E-4E27-9B9F-DBDEC4E89AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DBD436E-E55E-4E27-9B9F-DBDEC4E89AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DBD436E-E55E-4E27-9B9F-DBDEC4E89AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DBD436E-E55E-4E27-9B9F-DBDEC4E89AF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63BB0858-DD7C-45C8-BC8D-68BC56BCFC2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63BB0858-DD7C-45C8-BC8D-68BC56BCFC2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63BB0858-DD7C-45C8-BC8D-68BC56BCFC2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63BB0858-DD7C-45C8-BC8D-68BC56BCFC2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
