@@ -6,6 +6,30 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>10.0</LangVersion>
+
+    <!-- Nuget Package Info -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0-preview.1</Version>
+    <Authors>Olavo Henrique Dias</Authors>
+    <Company>Olavo Henrique Dias</Company>
+    <Product>GitHubApps.AspNetCore.Mvc</Product>
+    <Description>A framework to facilitate the creation of GitHub Apps using Asp.NET Core</Description>
+    <Summary>A framework to facilitate the creation of GitHub Apps using Asp.NET Core</Summary>
+    <Copyright>Copyright © Olavo Henrique Dias 2023</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Title>GitHubApps.Asp.Net.Core .NET</Title>
+    <PackageId>GitHubApps.AspNetCore.Mvc</PackageId>
+    <PackageTags>GitHub .NET Git Hub Apps Dot Net AspNet Asp Net Core</PackageTags>    
+    <PackageReadmeFile>README.MD</PackageReadmeFile>
+    <PackageIcon>packageIcon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/olavodias/GitHubApps.AspNetCore.Mvc</PackageProjectUrl>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RootNamespace>GitHubApps.AspNetCore.Mvc</RootNamespace>
+    <AssemblyName>GitHubApps.AspNetCore.Mvc</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
