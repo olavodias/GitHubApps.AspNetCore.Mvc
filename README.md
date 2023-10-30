@@ -48,8 +48,7 @@ The next step is to use the `GitHubAppController`.
 
 ```cs
 // Program.cs
-
-app.MapControllerROute(
+app.MapControllerRoute(
     name: "MyGitHubApp",
     pattern: new { controller = "GitHubAppController" }
 );
