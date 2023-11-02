@@ -29,6 +29,8 @@ using GitHubApps;
 using GitHubApps.AspNetCore.Mvc;
 using GitHubApps.Models;
 using GitHubApps.Models.Events;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GitHubApps.AspNetCore.Mvc.Testing;
 
@@ -40,27 +42,78 @@ public class TestControllers
 {
 
     [TestMethod]
-    public void TestGitHubAppController()
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_CREATED, DisplayName = "Installation Created")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_DELETED, DisplayName = "Installation Deleted")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_SUSPEND, DisplayName = "Installation Suspend")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_UNSUSPEND, DisplayName = "Installation Unsuspend")]
+    [DataRow(GitHubEvents.EVENT_FORK, null, DisplayName = "Fork")]
+    public void TestGitHubAppController(string eventName, string? action)
     {
         // *************************************************************************************
         // Arrange
         // *************************************************************************************
-        var controller = new GitHubAppController(null, new SampleGitHubApp());
+        var sampleApp = new SampleGitHubApp();
 
-        // Setup Request Headers
-        controller.Request.Headers.Add(GitHubHeaders.HEADERS_GITHUB_EVENT, new Microsoft.Extensions.Primitives.StringValues(""));
+        var httpContext = new DefaultHttpContext();
+
+        // Setup File Name
+        string requestFileName;
+        string methodName;
+
+        if (action is null)
+        {
+            requestFileName = $"{eventName}.json";
+            methodName = $"onevent{eventName}".ToLower();
+        }
+        else
+        {
+            requestFileName = $"{eventName}.{action}.json";
+            methodName = $"onevent{eventName}{action}".ToLower();
+        }
+
+        var requestFileFullPath = Path.Combine("Payload", eventName, requestFileName);
+
+        // Load Payload Data
+        var parsedFileData = TestHelper.GetPayloadFromFile(requestFileFullPath) ?? throw new NullReferenceException();
+
+        Assert.IsNotNull(parsedFileData.Event);
+        Assert.IsNotNull(parsedFileData.Payload);
+
+        Assert.AreEqual(eventName.ToLower(), parsedFileData.Event.ToLower());
+
+        // Generate Stream for the Request Body
+        var stream = TestHelper.ConvertStringToStream(parsedFileData.Payload);
+        httpContext.Request.Body = stream;
+        httpContext.Request.ContentLength = stream.Length;
+
+        // Create the Controller to Unit Test
+        var controller = new GitHubAppController(null, sampleApp)
+        {
+            ControllerContext = new ControllerContext()
+            {
+                HttpContext = httpContext
+            }
+        };
 
         // *************************************************************************************
         // Act
         // *************************************************************************************
 
-        //controller.PostAsync()
+        // Setup Request Headers
+        controller.Request.Headers.Add(GitHubHeaders.HEADERS_GITHUB_EVENT, new Microsoft.Extensions.Primitives.StringValues(eventName));
+        controller.Request.Method = "POST";
 
+        controller.PostAsync().GetAwaiter().GetResult();
 
         // *************************************************************************************
         // Assert
         // *************************************************************************************
+
+        Assert.AreEqual(methodName, sampleApp.LastMethodCalled);
+       
     }
 
 }
+
+
 
