@@ -15,7 +15,7 @@ Refer to the [API Documentation](https://olavodias.github.io/GitHubApps) to have
 
 ## Usage
 
-Add the nuget package [GitHubApps.AspNetCore.Mvc](https://www.nuget.org/packages/GitHubApps.AspNetCore.Mvc/) into your project.
+Add the nuget package [GitHubApps.AspNetCore.Mvc](https://www.nuget.org/packages/GitHubApps.AspNetCore.Mvc/) into your project. It will automatically add the [GitHubApps](https://www.nuget.org/packages/GitHubApps/), and [GitHubAuth](https://www.nuget.org/packages/GitHubAuth/) to your project.
 
 Create your own `GitHubApp`, by creating a class that inherits from the `GitHubAppBase` class.
 
@@ -55,7 +55,7 @@ app.MapControllerRoute(
 
 ```
 
-You can also implement your own controller.
+You can also implement your own controller. 
 
 ```cs
 // MyController.cs

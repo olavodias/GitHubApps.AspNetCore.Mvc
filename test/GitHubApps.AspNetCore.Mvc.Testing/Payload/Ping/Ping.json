@@ -1,0 +1,23 @@
+﻿{
+  "event": "ping",
+  "payload": {
+    "zen": "It's not fully shipped until it's fast.",
+    "hook_id": 431141642,
+    "hook": {
+      "type": "App",
+      "id": 431141642,
+      "name": "web",
+      "active": true,
+      "events": [ "branch_protection_configuration", "branch_protection_rule", "check_run", "check_suite", "code_scanning_alert", "commit_comment", "create", "delete", "dependabot_alert", "deployment", "deployment_protection_rule", "deployment_review", "deployment_status", "deploy_key", "discussion", "discussion_comment", "fork", "gollum", "issues", "issue_comment", "label", "member", "membership", "merge_group", "merge_queue_entry", "meta", "milestone", "organization", "org_block", "page_build", "personal_access_token_request", "project", "projects_v2", "projects_v2_item", "project_card", "project_column", "public", "pull_request", "pull_request_review", "pull_request_review_comment", "pull_request_review_thread", "push", "registry_package", "release", "repository", "repository_advisory", "repository_dispatch", "repository_ruleset", "secret_scanning_alert", "secret_scanning_alert_location", "security_advisory", "security_and_analysis", "star", "status", "team", "team_add", "watch", "workflow_dispatch", "workflow_job", "workflow_run" ],
+      "config": {
+        "content_type": "json",
+        "insecure_ssl": "0",
+        "url": "https://smee.io/L1v2BjhhIgo8Oiso"
+      },
+      "updated_at": "2023-08-30T02:51:08Z",
+      "created_at": "2023-08-30T02:51:08Z",
+      "app_id": 382983,
+      "deliveries_url": "https://api.github.com/app/hook/deliveries"
+    }
+  }
+}

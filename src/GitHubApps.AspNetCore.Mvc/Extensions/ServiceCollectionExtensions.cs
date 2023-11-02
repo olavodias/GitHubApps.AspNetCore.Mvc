@@ -72,7 +72,7 @@ public static class ServiceCollectionExtensions
         return services.AddSingleton<TGitHubApp>();
     }
 
-
 #endif
+
 }
 

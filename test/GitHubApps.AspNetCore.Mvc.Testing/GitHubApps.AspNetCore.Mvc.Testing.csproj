@@ -18,4 +18,59 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\GitHubApps.AspNetCore.Mvc\GitHubApps.AspNetCore.Mvc.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ConverterData\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConverterData\" />
+  </ItemGroup>
+
+    <ItemGroup>
+    <None Remove="Payload\" />
+    <None Remove="Payload\Push\" />
+    <None Remove="Payload\CheckSuite\" />
+    <None Remove="Payload\PullRequest\" />
+    <None Remove="Payload\IssueComment\" />
+    <None Remove="Payload\Star\" />
+    <None Remove="Payload\Watch\" />
+    <None Remove="Payload\Milestone\" />
+    <None Remove="Payload\Issues\" />
+    <None Remove="Payload\Installation\" />
+    <None Remove="Payload\Create\" />
+    <None Remove="Payload\Ping\" />
+    <None Remove="Payload\Fork\" />
+    <None Remove="Payload\Delete\" />
+    <None Remove="Payload\Repository\" />
+    <None Remove="Payload\InstallationRepositories\" />
+    <None Remove="Payload\SecurityAdvisory\" />
+    <None Remove="Payload\Label\" />
+    <None Remove="ConverterData\" />
+    <None Remove="Payload\Release\" />
+    <None Remove="Payload\Public\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Payload\" />
+    <Folder Include="Payload\Push\" />
+    <Folder Include="Payload\CheckSuite\" />
+    <Folder Include="Payload\PullRequest\" />
+    <Folder Include="Payload\IssueComment\" />
+    <Folder Include="Payload\Star\" />
+    <Folder Include="Payload\Watch\" />
+    <Folder Include="Payload\Milestone\" />
+    <Folder Include="Payload\Issues\" />
+    <Folder Include="Payload\Installation\" />
+    <Folder Include="Payload\Create\" />
+    <Folder Include="Payload\Ping\" />
+    <Folder Include="Payload\Fork\" />
+    <Folder Include="Payload\Delete\" />
+    <Folder Include="Payload\Repository\" />
+    <Folder Include="Payload\InstallationRepositories\" />
+    <Folder Include="Payload\SecurityAdvisory\" />
+    <Folder Include="Payload\Label\" />
+    <Folder Include="ConverterData\" />
+    <Folder Include="Payload\Release\" />
+    <Folder Include="Payload\Public\" />
+  </ItemGroup>
+
 </Project>

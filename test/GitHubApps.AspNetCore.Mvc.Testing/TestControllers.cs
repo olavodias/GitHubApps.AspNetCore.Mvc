@@ -28,6 +28,7 @@ using System;
 using GitHubApps;
 using GitHubApps.AspNetCore.Mvc;
 using GitHubApps.Models;
+using GitHubApps.Models.Events;
 
 namespace GitHubApps.AspNetCore.Mvc.Testing;
 
@@ -41,11 +42,24 @@ public class TestControllers
     [TestMethod]
     public void TestGitHubAppController()
     {
+        // *************************************************************************************
         // Arrange
-        
-        //var controller = new GitHubAppController(null, new GitHubApp);
+        // *************************************************************************************
+        var controller = new GitHubAppController(null, new SampleGitHubApp());
+
+        // Setup Request Headers
+        controller.Request.Headers.Add(GitHubHeaders.HEADERS_GITHUB_EVENT, new Microsoft.Extensions.Primitives.StringValues(""));
+
+        // *************************************************************************************
+        // Act
+        // *************************************************************************************
+
+        //controller.PostAsync()
 
 
+        // *************************************************************************************
+        // Assert
+        // *************************************************************************************
     }
 
 }
