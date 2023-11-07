@@ -8,12 +8,18 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="GitHubApps" Version="1.2.0" />
+    <PackageReference Include="GitHubApps" Version="1.2.1-preview.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GitHubApps.AspNetCore.Mvc\GitHubApps.AspNetCore.Mvc.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>

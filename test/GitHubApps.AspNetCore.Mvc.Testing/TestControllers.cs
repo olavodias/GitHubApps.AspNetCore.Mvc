@@ -42,16 +42,38 @@ public class TestControllers
 {
 
     [TestMethod]
-    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_CREATED, DisplayName = "Installation Created")]
-    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_DELETED, DisplayName = "Installation Deleted")]
-    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_SUSPEND, DisplayName = "Installation Suspend")]
-    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_UNSUSPEND, DisplayName = "Installation Unsuspend")]
-    [DataRow(GitHubEvents.EVENT_FORK, null, DisplayName = "Fork")]
+    [DataRow(GitHubEvents.EVENT_CREATE, null, DisplayName = "Test Event Create")]
+    [DataRow(GitHubEvents.EVENT_DELETE, null, DisplayName = "Test Event Delete")]
+    [DataRow(GitHubEvents.EVENT_FORK, null, DisplayName = "Test Event Fork")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_CREATED, DisplayName = "Test Event Installation Created")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_DELETED, DisplayName = "Test Event Installation Deleted")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_SUSPEND, DisplayName = "Test Event Installation Suspend")]
+    [DataRow(GitHubEvents.EVENT_INSTALLATION, GitHubEventActions.EVENT_ACTION_UNSUSPEND, DisplayName = "Test Event Installation Unsuspend")]
+    [DataRow(GitHubEvents.EVENT_ISSUE_COMMENT, GitHubEventActions.EVENT_ACTION_CREATED, DisplayName = "Test Event Issue Comment Created")]
+    [DataRow(GitHubEvents.EVENT_ISSUE_COMMENT, GitHubEventActions.EVENT_ACTION_DELETED, DisplayName = "Test Event Issue Comment Deleted")]
+    [DataRow(GitHubEvents.EVENT_ISSUE_COMMENT, GitHubEventActions.EVENT_ACTION_EDITED, DisplayName = "Test Event Issue Comment Edited")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_ASSIGNED, DisplayName = "Test Event Issue Assigned")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_CLOSED, DisplayName = "Test Event Issue Closed")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_DELETED, DisplayName = "Test Event Issue Deleted")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_DEMILESTONED, DisplayName = "Test Event Issue Demilestoned")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_EDITED, DisplayName = "Test Event Issue Edited")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_LABELED, DisplayName = "Test Event Issue Labeled")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_LOCKED, DisplayName = "Test Event Issue Locked")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_MILESTONED, DisplayName = "Test Event Issue Milestoned")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_OPENED, DisplayName = "Test Event Issue Opened")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_PINNED, DisplayName = "Test Event Issue Pinned")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_REOPENED, DisplayName = "Test Event Issue Reopened")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_TRANSFERRED, DisplayName = "Test Event Issue Transferred")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_UNASSIGNED, DisplayName = "Test Event Issue Unassigned")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_UNLABELED, DisplayName = "Test Event Issue Unlabeled")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_UNLOCKED, DisplayName = "Test Event Issue Unlocked")]
+    [DataRow(GitHubEvents.EVENT_ISSUES, GitHubEventActions.EVENT_ACTION_UNPINNED, DisplayName = "Test Event Issue Unpinned")]
     public void TestGitHubAppController(string eventName, string? action)
     {
         // *************************************************************************************
         // Arrange
         // *************************************************************************************
+        var parsedEventName = eventName.Replace("_", string.Empty);
         var sampleApp = new SampleGitHubApp();
 
         var httpContext = new DefaultHttpContext();
@@ -62,16 +84,16 @@ public class TestControllers
 
         if (action is null)
         {
-            requestFileName = $"{eventName}.json";
-            methodName = $"onevent{eventName}".ToLower();
+            requestFileName = $"{parsedEventName}.json";
+            methodName = $"onevent{parsedEventName}".ToLower();
         }
         else
         {
-            requestFileName = $"{eventName}.{action}.json";
-            methodName = $"onevent{eventName}{action}".ToLower();
+            requestFileName = $"{parsedEventName}.{action}.json";
+            methodName = $"onevent{parsedEventName}{action}".ToLower();
         }
 
-        var requestFileFullPath = Path.Combine("Payload", eventName, requestFileName);
+        var requestFileFullPath = Path.Combine("Payload", parsedEventName, requestFileName);
 
         // Load Payload Data
         var parsedFileData = TestHelper.GetPayloadFromFile(requestFileFullPath) ?? throw new NullReferenceException();
@@ -87,7 +109,7 @@ public class TestControllers
         httpContext.Request.ContentLength = stream.Length;
 
         // Create the Controller to Unit Test
-        var controller = new GitHubAppController(null, sampleApp)
+        var controller = new MyGitHubAppController(sampleApp)
         {
             ControllerContext = new ControllerContext()
             {
@@ -110,9 +132,7 @@ public class TestControllers
         // *************************************************************************************
 
         Assert.AreEqual(methodName, sampleApp.LastMethodCalled);
-       
     }
-
 }
 
 

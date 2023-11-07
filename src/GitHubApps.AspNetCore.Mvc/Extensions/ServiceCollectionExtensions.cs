@@ -30,6 +30,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 #if NET6_0_OR_GREATER
 
+using GitHubAuth.Jwt;
+using GitHubAuth;
 using System.Diagnostics.CodeAnalysis;
 
 #endif
@@ -44,35 +46,42 @@ public static class ServiceCollectionExtensions
 
 #if NET6_0_OR_GREATER
 
-    /// <summary>
-    /// Adds a singleton GitHub App of the type specified in <typeparamref name="TGitHubApp"/> to the  
-    /// specified <see cref="IServiceCollection"/>
-    /// </summary>
-    /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
-    /// <returns>A reference to this instance after the operation has completed</returns>
-    public static IServiceCollection AddGitHubApp<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TGitHubApp>(this IServiceCollection services)
-        where TGitHubApp: GitHubAppBase
+    public static IServiceCollection AddGitHubJwt(this IServiceCollection services, Func<IServiceProvider, IGitHubJwt> implementationFactory)
     {
-        return services.AddSingleton<TGitHubApp>();
+        return services.AddSingleton<IGitHubJwt>(implementationFactory);
     }
 
-#else
-
-    /// <summary>
-    /// Adds a singleton GitHub App of the type specified in <typeparamref name="TGitHubApp"/> to the  
-    /// specified <see cref="IServiceCollection"/>
-    /// </summary>
-    /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
-    /// <returns>A reference to this instance after the operation has completed</returns>
-    public static IServiceCollection AddGitHubApp<TGitHubApp>(this IServiceCollection services)
-        where TGitHubApp : GitHubAppBase
+    public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services)
+        where TGitHubApp : class, IGitHubApp
+        where TAuthenticator : class, GitHubAuth.IAuthenticator
     {
-        return services.AddSingleton<TGitHubApp>();
+        return services.AddSingleton<IAuthenticator, TAuthenticator>()
+            .AddTransient<IGitHubApp, TGitHubApp>();
+    }
+
+    public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId)
+        where TGitHubApp : class, IGitHubApp
+        where TAuthenticator : class, GitHubAuth.IAuthenticator
+    {
+        return services.AddSingleton<IGitHubJwt>(new GitHubJwtWithRS256(privateKeyFileName, appId))
+            .AddSingleton<IAuthenticator, TAuthenticator>()
+            .AddScoped<IGitHubApp, TGitHubApp>();
     }
 
 #endif
 
+    /// <summary>
+    /// Adds a singleton GitHub App for dependency injection
+    /// </summary>
+    /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+    /// <param name="implementationFactory">The function to initialize the GitHub App</param>
+    /// <returns>A reference to this instance after the operation has completed</returns>
+    /// <remarks>This method will add a GitHub App and set it to be used by dependency injection when reffering to the type defined at <typeparamref name="TGitHubApp"/></remarks>
+    public static IServiceCollection AddTypedGitHubApp<TGitHubApp>(this IServiceCollection services, Func<IServiceProvider, TGitHubApp> implementationFactory)
+        where TGitHubApp: class, IGitHubApp
+    {
+        return services.AddSingleton<TGitHubApp>(implementationFactory);
+    }
 }
 

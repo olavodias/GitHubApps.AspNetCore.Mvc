@@ -74,7 +74,21 @@ If you creating a custom controller, add the `IGitHubApp` interface to your cont
 
 ```cs
 // Program.cs
-services.builder.AddGitHubApp<MyGitHubApp>();
+
+// Add the GitHub App (without authentication)
+builder.Services.AddGitHubApp<MyGitHubApp>();
+
+// Add the GitHub App with an IAuthenticator and a JWT signed with RS256 algorithm
+builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("appkey.pem", 123456);
+
+// Add the GitHub App with an IAuthenticator and a custom Jwt
+builder.Services.AddGitHubJwt(options => {
+    return new GitHubJwtWithRS256("appkey.pem", 123456);
+});
+builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>();
+
+
+
 
 // MyController.cs
 public class MyController: GitHubAppController

@@ -34,9 +34,8 @@ namespace GitHubApps.AspNetCore.Mvc;
 /// <summary>
 /// Represents a controller to handle a GitHub App Post Request
 /// </summary>
-/// <remarks>You can use the controller as is and create a route to it. Or, you can inherit from it and implement your own logic.</remarks>
-[ApiController]
-public class GitHubAppController: ControllerBase
+/// <remarks>Inherit from this class and implement your own controller</remarks>
+public abstract class GitHubAppController: ControllerBase
 {
 	/// <summary>
 	/// Reference to the <see cref="IGitHubApp"/> to be implemented
@@ -47,21 +46,22 @@ public class GitHubAppController: ControllerBase
 	/// </summary>
 	protected readonly ILogger? Logger;
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="GitHubAppController"/> class
-	/// </summary>
-	/// <param name="gitHubApp">The app to be implemented</param>
-	/// <param name="logger">The logger for performing logging</param>
-	public GitHubAppController(ILogger? logger, IGitHubApp gitHubApp)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="GitHubAppController"/> class
+    /// </summary>
+    /// <param name="logger">The logger for performing logging</param>
+    /// <param name="gitHubApp">The app to be implemented</param>
+    public GitHubAppController(IGitHubApp gitHubApp, ILogger? logger = null)
 	{
-		GitHubApp = gitHubApp;
-		Logger = logger;
+        Logger = logger;
+        GitHubApp = gitHubApp;
 	}
 
 	/// <summary>
 	/// The handler for a post request
 	/// </summary>
 	/// <returns>The results of the post request</returns>
+	/// <exception cref="TaskCanceledException">Thrown when the execution is cancelled by the function <see cref="OnBeforeProcessRequest(Dictionary{string, string}, string)"/></exception>
 	[HttpPost]
 	public virtual async Task<IActionResult> PostAsync()
 	{
@@ -84,13 +84,15 @@ public class GitHubAppController: ControllerBase
 			Request.Body.Position = 0;
 
 			// Process the request itself
-			OnBeforeProcessRequest(headers, requestBody);
-			var eventResult = await GitHubApp.ProcessRequest(headers, requestBody);
-			OnAfterProcessRequest(eventResult);
+			if (!OnBeforeProcessRequest(headers, requestBody))
+				throw new TaskCanceledException($"The request execution pipeline was cancelled by the \"{nameof(OnBeforeProcessRequest)}\" function");
+
+            var eventResult = await GitHubApp.ProcessRequest(headers, requestBody);
+            OnAfterProcessRequest(headers, requestBody, eventResult);
 
             return Ok();
         }
-		catch (Exception ex)
+        catch (Exception ex)
 		{
 			Logger?.LogError(LoggingEvents.GitHubAppControllerPost, ex, $"Unable to run '{nameof(GitHubApp.ProcessRequest)}'");
 			return new StatusCodeResult(StatusCodes.Status500InternalServerError);
@@ -102,18 +104,21 @@ public class GitHubAppController: ControllerBase
 	/// </summary>
 	/// <param name="headers">A dictionary containig the headers of the request</param>
 	/// <param name="requestBody">The request body</param>
+	/// <returns>A boolean to define whether to continue processing the request or not</returns>
 	/// <remarks>Throw exceptions in this method to suspend the processing of the request</remarks>
-	protected virtual void OnBeforeProcessRequest(Dictionary<string, string> headers, string requestBody)
+	protected virtual bool OnBeforeProcessRequest(Dictionary<string, string> headers, string requestBody)
 	{
-		
+		return true;
 	}
 
     /// <summary>
     /// Method called right after the <see cref="GitHubAppBase.ProcessRequest(Dictionary{string, string}, string)"/> method is called
     /// </summary>
+	/// <param name="headers">A dictionary containig the headers of the request</param>
+	/// <param name="requestBody">The request body</param>
     /// <param name="eventResult">The results of the event processing</param>
     /// <remarks>Avoid throwing exceptions from this method because the request itself has already been processed</remarks>
-    protected virtual void OnAfterProcessRequest(EventResult eventResult)
+    protected virtual void OnAfterProcessRequest(Dictionary<string, string> headers, string requestBody, EventResult eventResult)
 	{
 
 	}

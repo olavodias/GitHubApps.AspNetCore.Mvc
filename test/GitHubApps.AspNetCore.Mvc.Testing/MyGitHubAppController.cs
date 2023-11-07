@@ -1,5 +1,5 @@
 ﻿// *****************************************************************************
-// MyGitHubApp.cs
+// MyGitHubAppController.cs
 //
 // Author:
 //       Olavo Henrique Dias <olavodias@gmail.com>
@@ -25,54 +25,13 @@
 // THE SOFTWARE.
 // *****************************************************************************
 using System;
-using System.Diagnostics.CodeAnalysis;
-using GitHubApps.Models;
-using GitHubApps.Models.Events;
-using GitHubAuth;
+namespace GitHubApps.AspNetCore.Mvc.Testing;
 
-namespace GitHubApps.AspNetCore.Mvc.Example;
-
-public class MyGitHubApp: GitHubAppBase
+public sealed class MyGitHubAppController: GitHubAppController
 {
+	public MyGitHubAppController(IGitHubApp gitHubApp): base(gitHubApp)
+	{
 
-    public MyGitHubApp(IAuthenticator authenticator)
-    {
-        Authenticator = authenticator;
-        var jwt = Authenticator.GetToken();
-        Console.WriteLine("Token: {0}", jwt.Token);
-    }
-
-    
-    public override EventResult OnEventIssuesOpened(GitHubDelivery<GitHubEventIssuesChanged> payload)
-    {
-        //Authenticator!.GetToken<long>(1234);
-        Authenticator.GetToken<long>(1234);
-        try
-        {
-            ArgumentNullException.ThrowIfNull(Authenticator);
-            ArgumentNullException.ThrowIfNull(payload.Payload);
-            ArgumentNullException.ThrowIfNull(payload.Payload.Installation);
-
-            var authData = Authenticator.GetToken<long>(payload.Payload.Installation.ID);
-
-
-
-
-
-            return EventResult.SuccessEventResult;
-
-        }
-        catch
-        {
-            return EventResult.ErrorEventResult;
-        }
-    }
-
-    public override EventResult OnEventIssueCommentCreated(GitHubDelivery<GitHubEventIssueComment> payload)
-    {
-        
-        return base.OnEventIssueCommentCreated(payload);
-    }
-
+	}
 }
 
