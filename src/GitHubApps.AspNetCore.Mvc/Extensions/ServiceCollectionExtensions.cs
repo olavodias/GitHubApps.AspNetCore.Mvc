@@ -56,15 +56,15 @@ public static class ServiceCollectionExtensions
         where TAuthenticator : class, GitHubAuth.IAuthenticator
     {
         return services.AddSingleton<IAuthenticator, TAuthenticator>()
-            .AddTransient<IGitHubApp, TGitHubApp>();
+            .AddScoped<IGitHubApp, TGitHubApp>();
     }
 
-    public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId)
+    public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId, Func<IServiceProvider, TAuthenticator> authenticatorFactory)
         where TGitHubApp : class, IGitHubApp
         where TAuthenticator : class, GitHubAuth.IAuthenticator
     {
         return services.AddSingleton<IGitHubJwt>(new GitHubJwtWithRS256(privateKeyFileName, appId))
-            .AddSingleton<IAuthenticator, TAuthenticator>()
+            .AddSingleton<IAuthenticator, TAuthenticator>(authenticatorFactory)
             .AddScoped<IGitHubApp, TGitHubApp>();
     }
 

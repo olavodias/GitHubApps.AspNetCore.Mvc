@@ -26,6 +26,7 @@
 // *****************************************************************************
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using GitHubApps.Models;
 using GitHubApps.Models.Events;
 using GitHubAuth;
@@ -34,44 +35,64 @@ namespace GitHubApps.AspNetCore.Mvc.Example;
 
 public class MyGitHubApp: GitHubAppBase
 {
+    public GitHubService Service { get; init; }
 
-    public MyGitHubApp(IAuthenticator authenticator)
+    public MyGitHubApp(IAuthenticator authenticator, GitHubService gitHubService)
     {
         Authenticator = authenticator;
-        var jwt = Authenticator.GetToken();
-        Console.WriteLine("Token: {0}", jwt.Token);
+        Service = gitHubService;
     }
 
-    
     public override EventResult OnEventIssuesOpened(GitHubDelivery<GitHubEventIssuesChanged> payload)
     {
-        //Authenticator!.GetToken<long>(1234);
-        Authenticator.GetToken<long>(1234);
         try
         {
             ArgumentNullException.ThrowIfNull(Authenticator);
             ArgumentNullException.ThrowIfNull(payload.Payload);
             ArgumentNullException.ThrowIfNull(payload.Payload.Installation);
 
+            /*
+            var mainAuthData = Authenticator.GetToken();
+            Console.WriteLine($"JWT: {mainAuthData.Token}");
+
+            var client = ((AppAuthenticator)Authenticator).GetClient!();
+
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+            client.DefaultRequestHeaders.Add("User-Agent", "MyGitHubApp");
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", mainAuthData.Token);
+            
+            var responseInstallations = client.GetAsync("app/installations").GetAwaiter().GetResult();
+            */
+
             var authData = Authenticator.GetToken<long>(payload.Payload.Installation.ID);
 
+            // Set The Comments Content
+            var comments = "{\"body\" : \"Comment made by GitHub App\"}";
 
+            Service.Client.DefaultRequestHeaders.Accept.Clear();
+            Service.Client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+            Service.Client.DefaultRequestHeaders.Add("User-Agent", "MyGitHubApp");
+            Service.Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Token", authData.Token);
+            var response = Service.Client.PostAsync(payload.Payload.Issue!.CommentsURL, new StringContent(comments, Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
 
-
+            if (response is null) return EventResult.ErrorEventResult;
+            response.EnsureSuccessStatusCode();
 
             return EventResult.SuccessEventResult;
-
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
             return EventResult.ErrorEventResult;
         }
     }
 
     public override EventResult OnEventIssueCommentCreated(GitHubDelivery<GitHubEventIssueComment> payload)
     {
-        
-        return base.OnEventIssueCommentCreated(payload);
+
+        return EventResult.SuccessEventResult;
     }
 
 }

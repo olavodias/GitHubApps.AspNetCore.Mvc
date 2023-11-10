@@ -28,7 +28,22 @@ builder.Services.AddSingleton<GitHubAuth.IAuthenticator, GitHubAuth.AppAuthentic
 builder.Services.AddSingleton<IGitHubApp, MyGitHubApp>();
 */
 
-builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("appkey.pem", 383002);
+builder.Services.AddHttpClient<GitHubService>(c => c.BaseAddress = new Uri("https://api.github.com/"));
+builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("appkey.pem", 383002, provider =>
+{
+    var authenticator = new AppAuthenticator(provider.GetRequiredService<GitHubAuth.Jwt.IGitHubJwt>())
+    {
+        GetClient = () =>
+        {
+            var currentClient = provider.GetService<GitHubService>();
+            return currentClient is null
+                ? throw new NullReferenceException("Unable to create a Http Client for GitHub")
+                : currentClient.Client;
+        }
+    };
+
+    return authenticator;
+});
 
 var app = builder.Build();
 
