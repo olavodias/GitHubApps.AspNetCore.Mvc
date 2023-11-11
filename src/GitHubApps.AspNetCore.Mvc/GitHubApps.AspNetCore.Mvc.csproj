@@ -9,7 +9,7 @@
 
     <!-- Nuget Package Info -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0-preview.1</Version>
+    <Version>0.1.0-rc.1</Version>
     <Authors>Olavo Henrique Dias</Authors>
     <Company>Olavo Henrique Dias</Company>
     <Product>GitHubApps.AspNetCore.Mvc</Product>
@@ -42,7 +42,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="GitHubApps" Version="1.2.1-preview.4" />
+    <PackageReference Include="GitHubApps" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 <PrivateAssets>all</PrivateAssets>
 </PackageReference>
-    <PackageReference Include="GitHubApps" Version="1.2.1-preview.4" />
+    <PackageReference Include="GitHubApps" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
