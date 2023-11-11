@@ -40,12 +40,24 @@ namespace GitHubApps.AspNetCore.Mvc.Extensions;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-
+    /// <summary>
+    /// Adds a <see cref="IGitHubJwt"/> object to be used by <see cref="IAuthenticator">Authenticators</see> when a JWT is needed
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> where the service is being added to</param>
+    /// <param name="implementationFactory">The factory to Initialize the <see cref="IGitHubJwt"/></param>
+    /// <returns></returns>
     public static IServiceCollection AddGitHubJwt(this IServiceCollection services, Func<IServiceProvider, IGitHubJwt> implementationFactory)
     {
         return services.AddSingleton<IGitHubJwt>(implementationFactory);
     }
 
+    /// <summary>
+    /// Adds a GitHub App into Dependency Injection
+    /// </summary>
+    /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
+    /// <typeparam name="TAuthenticator">The type of the Authenticator</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> where the service is being added to</param>
+    /// <returns>The Service Collection</returns>
     public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services)
         where TGitHubApp : class, IGitHubApp
         where TAuthenticator : class, GitHubAuth.IAuthenticator
@@ -54,6 +66,16 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGitHubApp, TGitHubApp>();
     }
 
+    /// <summary>
+    /// Adds a GitHub App into Dependency Injection, using the <see cref="GitHubJwtWithRS256"/> class to generate the JWT
+    /// </summary>
+    /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
+    /// <typeparam name="TAuthenticator">The type of the Authenticator</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> where the service is being added to</param>
+    /// <param name="privateKeyFileName">The path to the PEM file</param>
+    /// <param name="appId">The GitHub Application ID</param>
+    /// <param name="authenticatorFactory">A factory to initialize the <typeparamref name="TAuthenticator"/></param>
+    /// <returns>The Service Collection</returns>
     public static IServiceCollection AddGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId, Func<IServiceProvider, TAuthenticator> authenticatorFactory)
         where TGitHubApp : class, IGitHubApp
         where TAuthenticator : class, GitHubAuth.IAuthenticator
@@ -63,15 +85,17 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGitHubApp, TGitHubApp>();
     }
 
-
     /// <summary>
     /// Adds a singleton GitHub App for dependency injection
     /// </summary>
     /// <typeparam name="TGitHubApp">The type of the GitHub App</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
-    /// <param name="implementationFactory">The function to initialize the GitHub App</param>
-    /// <returns>A reference to this instance after the operation has completed</returns>
-    /// <remarks>This method will add a GitHub App and set it to be used by dependency injection when reffering to the type defined at <typeparamref name="TGitHubApp"/></remarks>
+    /// <typeparam name="TAuthenticator">The type of the Authenticator</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> where the service is being added to</param>
+    /// <param name="privateKeyFileName">The path to the PEM file</param>
+    /// <param name="appId">The GitHub Application ID</param>
+    /// <param name="authenticatorFactory">A factory to initialize the <typeparamref name="TAuthenticator"/></param>
+    /// <returns>The Service Collection</returns>
+    /// <remarks>This method will add a GitHub App and set it to be used by dependency injection when reffering to the type defined at <typeparamref name="TGitHubApp"/>, insteadf of the <see cref="IGitHubApp"/></remarks>
     public static IServiceCollection AddTypedGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId, Func<IServiceProvider, TAuthenticator> authenticatorFactory)
         where TGitHubApp : class, IGitHubApp
         where TAuthenticator : class, GitHubAuth.IAuthenticator
@@ -80,7 +104,6 @@ public static class ServiceCollectionExtensions
             .AddSingleton<IAuthenticator, TAuthenticator>(authenticatorFactory)
             .AddScoped<TGitHubApp>();
     }
-
 }
 
 #endif

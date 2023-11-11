@@ -179,6 +179,8 @@ public class MyController02: GitHubAppController
 }
 ```
 
+> Refer to the Project `GitHubApps.AspNetCore.Mvc.Example` to see a working example.
+
 ## Links
 
 This section contains links that are relevant to this repository.
