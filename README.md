@@ -15,6 +15,8 @@ Refer to the [API Documentation](https://olavodias.github.io/GitHubApps) to have
 
 ## Usage
 
+### Creating the GitHub App
+
 Add the nuget package [GitHubApps.AspNetCore.Mvc](https://www.nuget.org/packages/GitHubApps.AspNetCore.Mvc/) into your project. It will automatically add the [GitHubApps](https://www.nuget.org/packages/GitHubApps/), and [GitHubAuth](https://www.nuget.org/packages/GitHubAuth/) to your project.
 
 Create your own `GitHubApp`, by creating a class that inherits from the `GitHubAppBase` class.
@@ -22,8 +24,27 @@ Create your own `GitHubApp`, by creating a class that inherits from the `GitHubA
 ```cs
 using GitHubApps;
 
-public class MyGitHubApp: GitHubAppBase
+public class MyGitHubAppWithoutAuthentication: GitHubAppBase
 {
+    public MyGitHubApp()
+    {
+        
+    }
+
+   //TODO: Override the virtual methods for each event
+}
+
+public class MyGitHubAppWithAuthentication: GitHubAppBase
+{
+    // override the property to a non-nullable property, this will prevent the warning CS8602 (Dereference of a possibly null reference) from being displayed
+    public new IAuthenticator Authenticator { get; set; }
+
+    // require the authenticator to come from dependency injection
+    public MyGitHubApp(IAuthenticator authenticator)
+    {
+        Authenticator = authenticator;
+    }
+
    //TODO: Override the virtual methods for each event
 }
 ```
@@ -35,6 +56,12 @@ using GitHubApps;
 
 public class MyGitHubApp: GitHubAppBase
 {
+   //TODO: Initialization of the class goes here
+   public class MyGitHubApp()
+   {
+       ...
+   }
+
    public override EventResult OnEventInstallationCreated(GitHubDelivery<GitHubEventInstallation> payload)
    {
       // Your code goes here...
@@ -44,72 +71,93 @@ public class MyGitHubApp: GitHubAppBase
 
 For more information, refer to the [API Documentation](https://olavodias.github.io/GitHubApps).
 
-The next step is to use the `GitHubAppController`.
+> Optionally, you can create a class that implements the `IGitHubApp` interface. However, this is not recommended as all the handling of the GitHub Post request will have to be handled manually.
+
+### Creating the ASP.Net Core Web Api
+
+After you created the `GitHubApp`, you need to implement the Controller.
+
+In a ASP.Net Core Web Api, create a class that derives from the `GitHubAppController` class. This will allow you to define a `Route` for the class.
 
 ```cs
-// Program.cs
-app.MapControllerRoute(
-    name: "MyGitHubApp",
-    pattern: new { controller = "GitHubAppController" }
-);
-
-```
-
-You can also implement your own controller. 
-
-```cs
-// MyController.cs
-public class MyController: GitHubAppController
+[ApiController]
+[Route("GitHubApp")]
+public class MyGitHubAppController: GitHubAppController
 {
-    public MyController(IGitHubApp gitHubApp): base(null, gitHubApp)
-    {
+	public MyGitHubAppController(IGitHubApp gitHubApp): base(null, gitHubApp)
+	{
 
-    }
+	}
 }
 ```
 
 On your `Program.cs` class, add your custom GitHub App. This will configure Dependency Injection to recognize your GitHubApp.
 
-If you creating a custom controller, add the `IGitHubApp` interface to your controller constructor.
-
 ```cs
 // Program.cs
 
-// Add the GitHub App (without authentication)
-builder.Services.AddGitHubApp<MyGitHubApp>();
-
-// Add the GitHub App with an IAuthenticator and a JWT signed with RS256 algorithm
-builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("appkey.pem", 123456);
-
-// Add the GitHub App with an IAuthenticator and a custom Jwt
-builder.Services.AddGitHubJwt(options => {
-    return new GitHubJwtWithRS256("appkey.pem", 123456);
-});
-builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>();
-
-
-
-
-// MyController.cs
-public class MyController: GitHubAppController
+// Adds the GitHub App With the Default JWT (GitHubJwtWithRS256)
+// This method automaticaly adds the IGitHubJwt into the dependency injection framework
+builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("path_to_pem_file.pem", 123456, provider =>
 {
-    public MyController(IGitHubApp gitHubApp): base(null, gitHubApp)
+    var authenticator = new AppAuthenticator(provider.GetRequiredService<GitHubAuth.Jwt.IGitHubJwt>())
+    {
+        GetClient = () =>
+        {
+            //TODO: Implement a function to return a client to the GitHub API
+        }
+    };
+
+    return authenticator;
+});
+
+// MyGitHubAppController.cs
+public class MyGitHubAppController: GitHubAppController
+{
+    public MyGitHubAppController(IGitHubApp gitHubApp): base(null, gitHubApp)
     {
 
     }
 }
 ```
 
-There could be cases when you need to implement more than one GitHub App in the same project. If this is the case, you can call the method and add multiple GitHubApps. However, you will need to specify which GitHub App to use in your controller, instead of refering to the `IGitHubApp`.
+There could be cases when you need to implement more than one GitHub App in the same project. If this is the case, you can call the method and add multiple GitHubApps. However, you will need to specify which GitHub App to use in your controller, instead of refering to the `IGitHubApp` interface.
 
 ```cs
 // Program.cs
-services.builder.AddGitHubApp<MyGitHubApp01>();
-services.builder.AddGitHubApp<MyGitHubApp02>();
+
+// Adds a Typed GitHub App
+builder.Services.AddTypedGitHubApp<MyGitHubApp01, AppAuthenticator>("path_to_pem_file01.pem", 123456, provider =>
+{
+    var authenticator = new AppAuthenticator(provider.GetRequiredService<GitHubAuth.Jwt.IGitHubJwt>())
+    {
+        GetClient = () =>
+        {
+            //TODO: Implement a function to return a client to the GitHub API        }
+    };
+
+    return authenticator;
+});
+
+builder.Services.AddTypedGitHubApp<MyGitHubApp02, AppAuthenticator>("path_to_pem_file02.pem", 789012, provider =>
+{
+    var authenticator = new AppAuthenticator(provider.GetRequiredService<GitHubAuth.Jwt.IGitHubJwt>())
+    {
+        GetClient = () =>
+        {
+            //TODO: Implement a function to return a client to the GitHub API
+        }
+    };
+
+    return authenticator;
+});
 
 // MyController01.cs
+[ApiController]
+[Route("GitHubApp01")]
 public class MyController01: GitHubAppController
 {
+    // Note that you have to refer to the MyGitHubApp02, instead of the IGitHubApp
     public MyController01(MyGitHubApp01 gitHubApp01): base(null, gitHubApp01)
     {
 
@@ -117,16 +165,17 @@ public class MyController01: GitHubAppController
 }
 
 // MyController02.cs
+[ApiController]
+[Route("GitHubApp02")]
 public class MyController02: GitHubAppController
 {
+    // Note that you have to refer to the MyGitHubApp02, instead of the IGitHubApp
     public MyController02(MyGitHubApp02 gitHubApp01): base(null, gitHubApp01)
     {
 
     }
 }
 ```
-
-> Optionally, you can create a class that implements the `IGitHubApp` interface. However, this is not recommended as all the handling of the GitHub Post request will have to be handled manually.
 
 ## Links
 

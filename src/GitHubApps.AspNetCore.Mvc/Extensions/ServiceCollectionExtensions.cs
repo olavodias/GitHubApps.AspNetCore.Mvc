@@ -24,17 +24,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 // *****************************************************************************
-using System;
-using GitHubApps.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 #if NET6_0_OR_GREATER
 
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
 using GitHubAuth.Jwt;
 using GitHubAuth;
-using System.Diagnostics.CodeAnalysis;
-
-#endif
 
 namespace GitHubApps.AspNetCore.Mvc.Extensions;
 
@@ -43,8 +40,6 @@ namespace GitHubApps.AspNetCore.Mvc.Extensions;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-
-#if NET6_0_OR_GREATER
 
     public static IServiceCollection AddGitHubJwt(this IServiceCollection services, Func<IServiceProvider, IGitHubJwt> implementationFactory)
     {
@@ -68,7 +63,6 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGitHubApp, TGitHubApp>();
     }
 
-#endif
 
     /// <summary>
     /// Adds a singleton GitHub App for dependency injection
@@ -78,10 +72,15 @@ public static class ServiceCollectionExtensions
     /// <param name="implementationFactory">The function to initialize the GitHub App</param>
     /// <returns>A reference to this instance after the operation has completed</returns>
     /// <remarks>This method will add a GitHub App and set it to be used by dependency injection when reffering to the type defined at <typeparamref name="TGitHubApp"/></remarks>
-    public static IServiceCollection AddTypedGitHubApp<TGitHubApp>(this IServiceCollection services, Func<IServiceProvider, TGitHubApp> implementationFactory)
-        where TGitHubApp: class, IGitHubApp
+    public static IServiceCollection AddTypedGitHubApp<TGitHubApp, TAuthenticator>(this IServiceCollection services, string privateKeyFileName, long appId, Func<IServiceProvider, TAuthenticator> authenticatorFactory)
+        where TGitHubApp : class, IGitHubApp
+        where TAuthenticator : class, GitHubAuth.IAuthenticator
     {
-        return services.AddSingleton<TGitHubApp>(implementationFactory);
+        return services.AddSingleton<IGitHubJwt>(new GitHubJwtWithRS256(privateKeyFileName, appId))
+            .AddSingleton<IAuthenticator, TAuthenticator>(authenticatorFactory)
+            .AddScoped<TGitHubApp>();
     }
+
 }
 
+#endif

@@ -13,29 +13,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Adds the GitHub App
-/*builder.Services.AddGitHubApp(options =>
+// Adds the GitHub Service
+builder.Services.AddHttpClient<MyGitHubService>(c =>
 {
-    var jwt = new GitHubAuth.Jwt.GitHubJwtWithRS256("appkey.pem", 383002);
-    var authenticator = new GitHubAuth.AppAuthenticator(jwt);
-    
-    return new MyGitHubApp(authenticator);    
-});*/
+    c.BaseAddress = new Uri("https://api.github.com/");
 
-/*
-builder.Services.AddSingleton<GitHubAuth.Jwt.IGitHubJwt>(new GitHubAuth.Jwt.GitHubJwtWithRS256("appkey.pem", 383002));
-builder.Services.AddSingleton<GitHubAuth.IAuthenticator, GitHubAuth.AppAuthenticator>();
-builder.Services.AddSingleton<IGitHubApp, MyGitHubApp>();
-*/
+    c.DefaultRequestHeaders.Accept.Clear();
+    c.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+    c.DefaultRequestHeaders.Add("User-Agent", "MyGitHubApp");
+});
 
-builder.Services.AddHttpClient<GitHubService>(c => c.BaseAddress = new Uri("https://api.github.com/"));
+// Adds the GitHub App
 builder.Services.AddGitHubApp<MyGitHubApp, AppAuthenticator>("appkey.pem", 383002, provider =>
 {
     var authenticator = new AppAuthenticator(provider.GetRequiredService<GitHubAuth.Jwt.IGitHubJwt>())
     {
         GetClient = () =>
         {
-            var currentClient = provider.GetService<GitHubService>();
+            var currentClient = provider.GetService<MyGitHubService>();
             return currentClient is null
                 ? throw new NullReferenceException("Unable to create a Http Client for GitHub")
                 : currentClient.Client;

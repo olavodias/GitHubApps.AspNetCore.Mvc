@@ -39,7 +39,7 @@ public static class LoggingEvents
     /// </summary>
     public static readonly EventId GitHubAppControllerPost = new(1, nameof(GitHubAppControllerPost));
 
-    
+
 
 }
 

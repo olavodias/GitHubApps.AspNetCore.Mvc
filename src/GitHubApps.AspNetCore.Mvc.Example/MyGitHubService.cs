@@ -1,5 +1,5 @@
 ﻿// *****************************************************************************
-// GitHubService.cs
+// MyGitHubService.cs
 //
 // Author:
 //       Olavo Henrique Dias <olavodias@gmail.com>
@@ -27,13 +27,13 @@
 using System;
 namespace GitHubApps.AspNetCore.Mvc.Example;
 
-public class GitHubService
+public class MyGitHubService
 {
-	public HttpClient Client { get; init; }
+    public HttpClient Client { get; init; }
 
-	public GitHubService(HttpClient client)
-	{
-		Client = client;
-	}
+    public MyGitHubService(HttpClient client)
+    {
+        Client = client;
+    }
 }
 

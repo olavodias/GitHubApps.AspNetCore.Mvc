@@ -27,11 +27,11 @@
 using System;
 namespace GitHubApps.AspNetCore.Mvc.Testing;
 
-public sealed class MyGitHubAppController: GitHubAppController
+public sealed class MyGitHubAppController : GitHubAppController
 {
-	public MyGitHubAppController(IGitHubApp gitHubApp): base(gitHubApp)
-	{
+    public MyGitHubAppController(IGitHubApp gitHubApp) : base(gitHubApp)
+    {
 
-	}
+    }
 }
 

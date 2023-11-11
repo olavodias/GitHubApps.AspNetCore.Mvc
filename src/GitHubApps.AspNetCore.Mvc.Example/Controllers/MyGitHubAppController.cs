@@ -31,11 +31,11 @@ namespace GitHubApps.AspNetCore.Mvc.Example.Controllers;
 
 [ApiController]
 [Route("GitHubApp")]
-public class MyGitHubAppController: GitHubAppController
+public class MyGitHubAppController : GitHubAppController
 {
-	public MyGitHubAppController(IGitHubApp gitHubApp): base(gitHubApp)
-	{
+    public MyGitHubAppController(IGitHubApp gitHubApp) : base(gitHubApp)
+    {
 
-	}
+    }
 }
 
