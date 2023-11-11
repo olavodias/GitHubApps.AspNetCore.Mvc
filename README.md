@@ -86,10 +86,10 @@ In a ASP.Net Core Web Api, create a class that derives from the `GitHubAppContro
 [Route("GitHubApp")]
 public class MyGitHubAppController: GitHubAppController
 {
-	public MyGitHubAppController(IGitHubApp gitHubApp): base(null, gitHubApp)
-	{
+    public MyGitHubAppController(IGitHubApp gitHubApp): base(null, gitHubApp)
+    {
 
-	}
+    }
 }
 ```
 
