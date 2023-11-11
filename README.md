@@ -24,6 +24,7 @@ Create your own `GitHubApp`, by creating a class that inherits from the `GitHubA
 ```cs
 using GitHubApps;
 
+// If your App does not need to connect to GitHub and do any action, you don't need authentication
 public class MyGitHubAppWithoutAuthentication: GitHubAppBase
 {
     public MyGitHubApp()
@@ -34,6 +35,7 @@ public class MyGitHubAppWithoutAuthentication: GitHubAppBase
    //TODO: Override the virtual methods for each event
 }
 
+// If your App needs to connect to GitHub and do any action, you will need authentication
 public class MyGitHubAppWithAuthentication: GitHubAppBase
 {
     // override the property to a non-nullable property, this will prevent the warning CS8602 (Dereference of a possibly null reference) from being displayed
