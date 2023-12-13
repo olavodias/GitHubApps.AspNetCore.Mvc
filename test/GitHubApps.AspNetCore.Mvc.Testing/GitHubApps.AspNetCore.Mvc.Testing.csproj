@@ -1,0 +1,333 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+<PrivateAssets>all</PrivateAssets>
+</PackageReference>
+    <PackageReference Include="GitHubApps" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\GitHubApps.AspNetCore.Mvc\GitHubApps.AspNetCore.Mvc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ConverterData\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ConverterData\" />
+  </ItemGroup>
+
+    <ItemGroup>
+    <None Remove="Payload\" />
+    <None Remove="Payload\Push\" />
+    <None Remove="Payload\CheckSuite\" />
+    <None Remove="Payload\PullRequest\" />
+    <None Remove="Payload\IssueComment\" />
+    <None Remove="Payload\Star\" />
+    <None Remove="Payload\Watch\" />
+    <None Remove="Payload\Milestone\" />
+    <None Remove="Payload\Issues\" />
+    <None Remove="Payload\Installation\" />
+    <None Remove="Payload\Create\" />
+    <None Remove="Payload\Ping\" />
+    <None Remove="Payload\Fork\" />
+    <None Remove="Payload\Delete\" />
+    <None Remove="Payload\Repository\" />
+    <None Remove="Payload\InstallationRepositories\" />
+    <None Remove="Payload\SecurityAdvisory\" />
+    <None Remove="Payload\Label\" />
+    <None Remove="ConverterData\" />
+    <None Remove="Payload\Release\" />
+    <None Remove="Payload\Public\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Payload\" />
+    <Folder Include="Payload\Push\" />
+    <Folder Include="Payload\CheckSuite\" />
+    <Folder Include="Payload\PullRequest\" />
+    <Folder Include="Payload\IssueComment\" />
+    <Folder Include="Payload\Star\" />
+    <Folder Include="Payload\Watch\" />
+    <Folder Include="Payload\Milestone\" />
+    <Folder Include="Payload\Issues\" />
+    <Folder Include="Payload\Installation\" />
+    <Folder Include="Payload\Create\" />
+    <Folder Include="Payload\Ping\" />
+    <Folder Include="Payload\Fork\" />
+    <Folder Include="Payload\Delete\" />
+    <Folder Include="Payload\Repository\" />
+    <Folder Include="Payload\InstallationRepositories\" />
+    <Folder Include="Payload\SecurityAdvisory\" />
+    <Folder Include="Payload\Label\" />
+    <Folder Include="ConverterData\" />
+    <Folder Include="Payload\Release\" />
+    <Folder Include="Payload\Public\" />
+  </ItemGroup>
+
+    <ItemGroup>
+
+    <!-- Check Suite Event -->
+    <None Update="Payload\CheckSuite\CheckSuite.Requested.01.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\CheckSuite\CheckSuite.Requested.02.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\CheckSuite\CheckSuite.Requested.03.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Create Event -->
+    <None Update="Payload\Create\Create.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Delete Event -->
+    <None Update="Payload\Delete\Delete.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Fork Event -->
+    <None Update="Payload\Fork\Fork.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Installation Event -->
+    <None Update="Payload\Installation\Installation.Created.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Installation\Installation.Created.02.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Installation\Installation.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Installation\Installation.Suspend.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Installation\Installation.Unsuspend.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Installation Repositories Event -->
+    <None Update="Payload\InstallationRepositories\InstallationRepositories.Removed.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Issue Comment Event -->
+    <None Update="Payload\IssueComment\IssueComment.Created.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\IssueComment\IssueComment.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\IssueComment\IssueComment.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Issues Event -->
+    <None Update="Payload\Issues\Issues.Assigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Closed.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Demilestoned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Labeled.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Locked.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Milestoned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Opened.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Pinned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Reopened.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Transferred.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Unassigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Unlabeled.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Unlocked.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Issues\Issues.Unpinned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Milestone Event -->
+    <None Update="Payload\Milestone\Milestone.Created.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Milestone\Milestone.Deleted.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Label Event -->
+    <None Update="Payload\Label\Label.Created.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Label\Label.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Label\Label.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Pull Request Event -->
+    <None Update="Payload\PullRequest\PullRequest.Assigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Closed.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.ConvertedToDraft.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Demilestoned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Labeled.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Locked.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Milestoned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Opened.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.ReadyForReview.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Reopened.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Unassigned.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Unlabeled.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\PullRequest\PullRequest.Unlocked.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Ping Event -->
+    <None Update="Payload\Ping\Ping.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Push Event -->
+    <None Update="Payload\Push\Push.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Push\Push.02.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Push\Push.03.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Release Event -->
+    <None Update="Payload\Release\Release.Created.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Release\Release.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Release\Release.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Release\Release.Prereleased.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Release\Release.Published.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Release\Release.Released.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Repository Event -->
+    <None Update="Payload\Repository\Repository.Archived.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Created.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Deleted.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Edited.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Privatized.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Publicized.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Renamed.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Transferred.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Repository\Repository.Unarchived.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+
+    <!-- Star Event -->
+    <None Update="Payload\Star\Star.Created.01.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Payload\Star\Star.Deleted.01.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+    <!-- Watch Event -->
+    <None Update="Payload\Watch\Watch.Started.01.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+
+  </ItemGroup>
+
+</Project>
